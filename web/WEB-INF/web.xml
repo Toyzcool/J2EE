@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app>
- 
+ 	<!-- HelloServlet -->
     <servlet>
         <servlet-name>HelloServlet</servlet-name>
         <servlet-class>HelloServlet</servlet-class>
+        <load-on-startup>10</load-on-startup>
     </servlet>
  
     <servlet-mapping>
@@ -11,6 +12,7 @@
         <url-pattern>/hello</url-pattern>
     </servlet-mapping>
  
+ 	<!-- LoginServlet -->
  	<servlet>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>LoginServlet</servlet-class>
@@ -20,5 +22,17 @@
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/login</url-pattern>
     </servlet-mapping>  
+    
+    <!-- RegisterServlet -->
+    <servlet>
+    	<servlet-name>RegisterServlet</servlet-name>
+    	<servlet-class>RegisterServlet</servlet-class>	
+    </servlet>
+    
+    <servlet-mapping>
+    	<servlet-name>RegisterServlet</servlet-name>
+    	<url-pattern>/register</url-pattern>
+    </servlet-mapping>
+    
     
 </web-app>
