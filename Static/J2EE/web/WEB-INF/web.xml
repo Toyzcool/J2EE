@@ -34,5 +34,16 @@
     	<url-pattern>/register</url-pattern>
     </servlet-mapping>
     
+        <!-- UploadPhotoServlet -->
+    <servlet>
+    	<servlet-name>UploadPhotoServlet</servlet-name>
+    	<servlet-class>UploadPhotoServlet</servlet-class>	
+    </servlet>
+    
+    <servlet-mapping>
+    	<servlet-name>UploadPhotoServlet</servlet-name>
+    	<url-pattern>/uploadPhoto</url-pattern>
+    </servlet-mapping>
+    
     
 </web-app>
