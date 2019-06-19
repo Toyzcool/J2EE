@@ -11,4 +11,3 @@
 
 - 下载Eclipse JST Server Adapters，下载http://download.eclipse.org/releases/kepler
 - 注意eclipse版本，需要是支持Java EE
-

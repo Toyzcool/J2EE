@@ -484,9 +484,21 @@ public class UploadPhotoServlet extends HttpServlet {
 
 - Users/toyz/Package/J2EE/UploadPhotoServlet.java
 
-### 
+### 6.动态Web项目
 
+#### 方法
 
+1.Servlet建立流程
+
+- 新建Dynamic Web project，同时添加Target runtime
+- runtime中添加响应的tomcat版本，选择tomcat所在的地址——如果没有相应的tomcat版本，下载Eclipse JST Server Adapters或者检查eclipse是否为JavaEE版本
+- 新建类，包名可以为空（方便输入地址时，只需要加上 项目名/类名）
+- 在WebContent/WEB-INF/lib中添加Servlet的包
+- 新建web.xml文件，编写映射
+- 右键项目，run as 选择在Server
+- 启动tomcat（如果端口被占用，则使用lsof -i tcp:22查询占用端口的应用，并使用kill pid来结束占用端口的进程）
+- 在浏览器输入[http://127.0.0.1:8080/Dynamic/hello](http://127.0.0.1:8080/Dynamic/hello)
+- 错误处理时，查看eclipse中的Markers来排错
 
 
 
