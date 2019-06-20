@@ -1,4 +1,4 @@
-# Java问题汇总
+# Java杂记
 
 1.无法生成.class文件
 
@@ -11,3 +11,33 @@
 
 - 下载Eclipse JST Server Adapters，下载http://download.eclipse.org/releases/kepler
 - 注意eclipse版本，需要是支持Java EE
+
+3.Java里面String，StringBuffer，StringBuilder的区别和联系
+
+- String是不可变的。<!--比如对String内容修改，两个String类型相加，则会新建String用来存储结果，其他的会被回收-->
+
+- 字符串拼接的+，底层是使用 StringBuffer 或者 StringBuilder 来完成
+
+- StringBuffer 是线程安全和同步的而 StringBuilder 则不是线程安全和非同步的即可，同时因为 StringBuffer 是线程线程安全的，所以它的性能低于 StringBuilder 类
+
+- 因此使用规则为：
+
+  （1）如果你要求字符串不可变，那么应该选择 String 类
+
+  （2）如果你需要字符串可变并且是线程安全的，那么你应该选择 StringBuffer 类
+
+  （3）如果你要求字符串可变并且不存在线程安全问题，那么你应该选择 StringBuilder 类
+
+4.占位符查询
+
+![](/Users/toyz/Desktop/屏幕快照 2019-06-20 下午8.51.48.png)
+
+5.String.format方法
+
+- ```java
+  String formatted = String.format("%s今年%d岁。", "小李", 30); // "小李今年30岁。
+  ```
+
+- 这个方法第一个参数是格式串，后面的参数都是格式串的参数，用于替换格式串中的占位符。
+- 占位符以 "%x" 的形式表示，不同的参数类型要用不同的字母。后面会具体介绍。
+- `String.format()` 返回值类型为字符串，也就是格式化的结果。
