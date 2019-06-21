@@ -10,15 +10,27 @@
         <servlet-name>HelloServlet</servlet-name>
         <url-pattern>/hello</url-pattern>
     </servlet-mapping>
-  
+  	
+  	<!-- 获取英雄列表 -->
   	<servlet>
         <servlet-name>HeroListServlet</servlet-name>
-        <servlet-class>HeroListServlet</servlet-class>
+        <servlet-class>servlet.HeroListServlet</servlet-class>
     </servlet>
  
     <servlet-mapping>
         <servlet-name>HeroListServlet</servlet-name>
         <url-pattern>/listHero</url-pattern>
     </servlet-mapping> 
+    
+    <!-- 增加英雄 -->
+     <servlet>
+        <servlet-name>HeroAddServlet</servlet-name>
+        <servlet-class>servlet.HeroAddServlet</servlet-class>
+    </servlet>
+ 
+    <servlet-mapping>
+        <servlet-name>HeroAddServlet</servlet-name>
+        <url-pattern>/addHero</url-pattern>
+    </servlet-mapping>
     
 </web-app>

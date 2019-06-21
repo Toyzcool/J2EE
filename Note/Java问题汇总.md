@@ -41,3 +41,9 @@
 - 这个方法第一个参数是格式串，后面的参数都是格式串的参数，用于替换格式串中的占位符。
 - 占位符以 "%x" 的形式表示，不同的参数类型要用不同的字母。后面会具体介绍。
 - `String.format()` 返回值类型为字符串，也就是格式化的结果。
+
+6.通过地址访问部署在Server上的文件，可以省略项目名的方法
+
+- 1.修改server.xml文件：将path中的项目名删除
+  <Context docBase="Dynamic" path="/项目名" reloadable="true" source="org.eclipse.jst.jee.server:Dynamic"/></Host>改为<Context docBase="Dynamic" path="/" reloadable="true" source="org.eclipse.jst.jee.server:Dynamic"/></Host>
+- 2.修改项目ProperProperties：右键项目-ProperProperties-Web Project Setting-Context root中的内容修改为/
