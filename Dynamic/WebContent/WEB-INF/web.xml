@@ -33,4 +33,26 @@
         <url-pattern>/addHero</url-pattern>
     </servlet-mapping>
     
+     <!-- 删除英雄 -->
+     <servlet>
+        <servlet-name>HeroDeleteServlet</servlet-name>
+        <servlet-class>servlet.HeroDeleteServlet</servlet-class>
+    </servlet>
+ 
+    <servlet-mapping>
+        <servlet-name>HeroDeleteServlet</servlet-name>
+        <url-pattern>/deleteHero</url-pattern>
+    </servlet-mapping>
+    
+    <!-- 删除英雄 -->
+     <servlet>
+        <servlet-name>HeroUpdateServlet</servlet-name>
+        <servlet-class>servlet.HeroUpdateServlet</servlet-class>
+    </servlet>
+ 
+    <servlet-mapping>
+        <servlet-name>HeroUpdateServlets</servlet-name>
+        <url-pattern>/updateHero</url-pattern>
+    </servlet-mapping>
+    
 </web-app>

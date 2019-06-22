@@ -16,11 +16,11 @@ public class HeroListServlet extends HttpServlet {
 		
 		StringBuffer sb = new StringBuffer();
 		sb.append("<table align='center' border='1' cellspacing='0'>");
-		sb.append("<tr><td>id</td><td>name</td><td>hp</td><td>damage</td></tr>");
+		sb.append("<tr><td>id</td><td>name</td><td>hp</td><td>damage</td><td>update</td><td>delete</td></tr>");
 		
-		String trForm = "<tr><td>%d</td><td>%s</td><td>%f</td><td>%d</td></tr>";
+		String trForm = "<tr><td>%d</td><td>%s</td><td>%f</td><td>%d</td><td><a href = 'updateHero?id=%d'>update</a></td><td><a href = 'deleteHero?id=%d'>delete</a></td></tr>";
 		for (Hero hero : heros) {
-			String tr = String.format(trForm, hero.getId(),hero.getName(),hero.getHp(),hero.getDamage());
+			String tr = String.format(trForm, hero.getId(),hero.getName(),hero.getHp(),hero.getDamage(), hero.getId(),hero.getId());
 			sb.append(tr);
 		}
 		sb.append("</table>");

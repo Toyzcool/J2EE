@@ -12,7 +12,7 @@ import java.sql.ResultSet;
  * 数据库的增删改查方法具体实现
  */
 
-public class HeroDAO implements DAO{
+public class HeroDAO{
 	// 构造方法初始化驱动
 	public HeroDAO(){
 		try {
