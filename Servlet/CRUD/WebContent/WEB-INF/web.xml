@@ -10,7 +10,8 @@
         <servlet-name>HelloServlet</servlet-name>
         <url-pattern>/hello</url-pattern>
     </servlet-mapping>
-  	
+    
+  	<!-- Servlet_CRUD -->
   	<!-- 获取英雄列表 -->
   	<servlet>
         <servlet-name>HeroListServlet</servlet-name>
@@ -55,7 +56,7 @@
         <url-pattern>/editHero</url-pattern>
     </servlet-mapping>
     
-    <!-- 编辑英雄 -->
+    <!-- 更新英雄 -->
      <servlet>
         <servlet-name>HeroUpdateServlet</servlet-name>
         <servlet-class>servlet.HeroUpdateServlet</servlet-class>
@@ -65,5 +66,6 @@
         <servlet-name>HeroUpdateServlet</servlet-name>
         <url-pattern>/updateHero</url-pattern>
     </servlet-mapping>
+
     
 </web-app>

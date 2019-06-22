@@ -1014,3 +1014,7 @@ public class HeroUpdateServlet extends HttpServlet {
 1.Servlet编写html代码易用性较差，因此考虑用JSON
 
 2.当前内容学习目的是掌握底层的处理逻辑
+
+#### 索引
+
+- Users/toyz/Package/J2EE/Dynamic
