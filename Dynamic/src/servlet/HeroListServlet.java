@@ -18,7 +18,7 @@ public class HeroListServlet extends HttpServlet {
 		sb.append("<table align='center' border='1' cellspacing='0'>");
 		sb.append("<tr><td>id</td><td>name</td><td>hp</td><td>damage</td><td>update</td><td>delete</td></tr>");
 		
-		String trForm = "<tr><td>%d</td><td>%s</td><td>%f</td><td>%d</td><td><a href = 'updateHero?id=%d'>update</a></td><td><a href = 'deleteHero?id=%d'>delete</a></td></tr>";
+		String trForm = "<tr><td>%d</td><td>%s</td><td>%f</td><td>%d</td><td><a href = 'editHero?id=%d'>update</a></td><td><a href = 'deleteHero?id=%d'>delete</a></td></tr>";
 		for (Hero hero : heros) {
 			String tr = String.format(trForm, hero.getId(),hero.getName(),hero.getHp(),hero.getDamage(), hero.getId(),hero.getId());
 			sb.append(tr);

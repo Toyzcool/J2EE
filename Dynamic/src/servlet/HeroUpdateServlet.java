@@ -1,19 +1,27 @@
 package servlet;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@SuppressWarnings("serial")
 public class HeroUpdateServlet extends HttpServlet {
-	protected void service(HttpServletRequest request,HttpServletResponse response) {
-		int id = Integer.parseInt(request.getParameter("id")) ;
+	protected void service(HttpServletRequest request,HttpServletResponse response) throws IOException {
+		request.setCharacterEncoding("UTF-8");
 		
-		Hero hero = new HeroDAO().get(id);
+		// 新建英雄对象
+		Hero hero = new Hero();
 		
-		StringBuffer format = new StringBuffer();
-		response.setContentType("text/html; charset=UTF-8");
+		// 获取英雄各个属性,并使用赋值方法
+		hero.setId(Integer.parseInt(request.getParameter("id")));
+		hero.setName(request.getParameter("name")); 
+		hero.setHp(Float.parseFloat(request.getParameter("hp")));
+		hero.setDamage(Integer.parseInt(request.getParameter("damage")));
 		
-		format.append(" <Form action='updateHero' method='post'> ");
-		format.append(" 名字：<input type='text' name='name' value='%s'> <br> ");
+		new HeroDAO().update(hero);
+		
+		response.sendRedirect("/listHero");
 	}
 }

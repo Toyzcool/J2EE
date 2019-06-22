@@ -508,23 +508,509 @@ public class UploadPhotoServlet extends HttpServlet {
   <Context docBase="Dynamic" path="/项目名" reloadable="true" source="org.eclipse.jst.jee.server:Dynamic"/></Host>改为<Context docBase="Dynamic" path="/" reloadable="true" source="org.eclipse.jst.jee.server:Dynamic"/></Host>
 - 2.修改项目ProperProperties：右键项目-ProperProperties-Web Project Setting-Context root中的内容修改为/
 
+### 7.使用Servlet进行CRUD开发
 
+#### 方法
 
+1.程序设计
 
+- 简单的增删改查
+- 新建前端页面，使用Form表单提交
+- 新建.xml文件，设计前端请求映射到指定类方法
+- 新建Java类，用于处理请求，并返回特定跳转链接，或使用getWriter().write(html)方法
 
+2.Java类中写html语言
 
+- 使用StringBuffer类中的append方法，添加html语言
+- 使用String.format()方法给属性赋值
+- 使用getWriter().write(html)展示出页面
 
+#### 实现
 
+1.addHero.html
 
+```html
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>添加英雄</title>
+	</head>
+	
+	<body>
+		<h2>新增英雄</h2>
+		<form action="addHero" method="post">
+			名字：<input type="text" name="name"><br>
+			血量：<input type="text" name="hp"><br>
+			伤害：<input type="text" name="damage"><br>
+			<input type="submit" value="增加">
+		</form>
+	</body>
+</html>
+```
 
+2.Hero.java
 
+```java
+package servlet;
 
+public class Hero {
+	public int id;
+	public String name;
+	public float hp;
+	public int damage;
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
 
+	public float getHp() {
+		return hp;
+	}
 
+	public void setHp(float hp) {
+		this.hp = hp;
+	}
 
+	public int getDamage() {
+		return damage;
+	}
 
+	public void setDamage(int damage) {
+		this.damage = damage;
+	}
 
+}
 
+```
 
+3.HeroDAO.java
 
+```java
+package servlet;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+/*
+ * 数据库的增删改查方法具体实现
+ */
+
+public class HeroDAO{
+	// 构造方法初始化驱动
+	public HeroDAO(){
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			System.out.println("初始化驱动成功");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	//提供getConnection方法返回连接
+	public Connection getConnection() throws SQLException {
+		return DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/mysqlTest?characterEcoding=utf8","root","admin123");
+	}
+	
+	// 获取数据总数
+	public int getTotal() {
+		int total = 0;
+		try (
+				Connection c = getConnection();
+				Statement s = c.createStatement();
+				)
+		{
+			String sql = "select count(*) from hero";
+			ResultSet rs = s.executeQuery(sql);
+			while (rs.next()) {
+				total = rs.getInt(1);
+			}
+			System.out.println("Total："+total);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return total;
+	}
+		
+	// 增加
+	public void add(Hero hero) {
+		String sql = "insert into hero value(null,?,?,?)";
+		try(
+				Connection c = getConnection();
+				PreparedStatement ps = c.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+				) 
+		{
+			c.setAutoCommit(false);
+			ps.setString(1, hero.name);
+			ps.setFloat(2, hero.hp);
+			ps.setInt(3, hero.damage);
+			ps.execute();
+			// 获取数据库分配的id
+			ResultSet rs = ps.getGeneratedKeys();
+			if(rs.next()) {
+				int id = rs.getInt(1);
+				hero.id = id;
+			}
+			c.commit();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		};
+	};
+		
+	// 删除
+	public void delete(int id) {
+		String sql = "delete from hero where id = ?";
+		try (
+				Connection c = getConnection();
+				PreparedStatement ps = c.prepareStatement(sql);
+				)
+		{
+			c.setAutoCommit(false);
+			ps.setInt(1, id);
+			ps.execute();
+			c.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	};
+		
+	// 修改
+	public void update(Hero hero) {
+		String sql = "update hero set name = ? , hp = ? , damage = ? where id = ?";
+		try (
+				Connection c = getConnection();
+				PreparedStatement ps = c.prepareStatement(sql)
+				)
+		{
+			c.setAutoCommit(false);
+			ps.setString(1, hero.name);
+			ps.setFloat(2, hero.hp);
+			ps.setInt(3, hero.damage);
+			ps.setInt(4, hero.id);
+			ps.execute();
+			c.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	};
+		
+	// 获取
+	public Hero get(int id) {
+		String sql = "select * from hero where id = ?";
+		Hero hero = null;
+		try (
+				Connection c = getConnection();
+				PreparedStatement ps = c.prepareStatement(sql);
+				)	 
+		{
+			c.setAutoCommit(false);
+			ps.setInt(1, id);
+			c.commit();
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				 hero = new Hero();
+				 String name = rs.getString("name");
+				 float hp = rs.getFloat("hp");
+				 int damage = rs.getInt("damage");
+				 hero.name = name;
+				 hero.hp = hp;
+				 hero.damage = damage;
+				 hero.id = id;
+			};
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return hero;
+	};
+	
+	public List<Hero> list() {
+        return list(0, Short.MAX_VALUE);
+    }
+
+	// 查询
+	public List<Hero> list(int start,int count){
+		List<Hero> heros = new ArrayList<Hero>();
+		String sql = "select * from hero order by id desc limit ? , ?";
+		try (
+				Connection c =  getConnection();
+				PreparedStatement ps = c.prepareStatement(sql);
+				)
+		{
+			c.setAutoCommit(false);
+			ps.setInt(1, start);
+			ps.setInt(2, count);
+			c.commit();
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				Hero hero = new Hero();
+				int id = rs.getInt("id");
+				String name = rs.getString(2);
+				float hp = rs.getFloat(3);
+				int damage = rs.getInt(4);
+				hero.id = id;
+				hero.name = name;
+				hero.hp = hp;
+				hero.damage = damage;
+				heros.add(hero);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return heros;
+	};
+}
+
+```
+
+4.HeroListServlet.java
+
+```java
+package servlet;
+import java.io.IOException;
+import java.util.List;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@SuppressWarnings("serial")
+public class HeroListServlet extends HttpServlet {
+	protected void service(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		//设置浏览器接受内容时所使用的编码方式
+		response.setContentType("text/html;charset = UTF-8");
+		// 获取英雄列表
+		List<Hero> heros = new HeroDAO().list();
+		
+		StringBuffer sb = new StringBuffer();
+		sb.append("<table align='center' border='1' cellspacing='0'>");
+		sb.append("<tr><td>id</td><td>name</td><td>hp</td><td>damage</td><td>update</td><td>delete</td></tr>");
+		
+		String trForm = "<tr><td>%d</td><td>%s</td><td>%f</td><td>%d</td><td><a href = 'editHero?id=%d'>update</a></td><td><a href = 'deleteHero?id=%d'>delete</a></td></tr>";
+		for (Hero hero : heros) {
+			String tr = String.format(trForm, hero.getId(),hero.getName(),hero.getHp(),hero.getDamage(), hero.getId(),hero.getId());
+			sb.append(tr);
+		}
+		sb.append("</table>");
+		
+		response.getWriter().write(sb.toString());
+	}
+}
+
+```
+
+5.HeroAddServlet
+
+```java
+package servlet;
+import java.io.IOException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@SuppressWarnings("serial")
+public class HeroAddServlet extends HttpServlet {
+	protected void service(HttpServletRequest request,HttpServletResponse response) throws IOException {
+		// 对客户端请求进行重现编码
+		request.setCharacterEncoding("UTF-8");
+		Hero hero = new Hero();
+		hero.setName(request.getParameter("name")); 
+		hero.setHp(Float.parseFloat(request.getParameter("hp")));
+		hero.setDamage(Integer.parseInt(request.getParameter("damage")));
+		new HeroDAO().add(hero);
+		response.sendRedirect("/listHero");
+	};
+}
+```
+
+6.HeroDeleteServlet.java
+
+```java
+package servlet;
+
+import java.io.IOException;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@SuppressWarnings("serial")
+public class HeroDeleteServlet extends HttpServlet {
+	protected void service(HttpServletRequest request ,HttpServletResponse response) throws IOException {
+		// 对客户端请求进行重现编码
+		request.setCharacterEncoding("UTF-8");
+		
+		int id = Integer.parseInt(request.getParameter("id")) ;
+		new HeroDAO().delete(id);
+		
+		response.sendRedirect("/listHero");
+	}
+}
+
+```
+
+7.HeroEditServlet
+
+```java
+package servlet;
+
+import java.io.IOException;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@SuppressWarnings("serial")
+public class HeroEditServlet extends HttpServlet {
+	protected void service(HttpServletRequest request,HttpServletResponse response) throws IOException {
+		int id = Integer.parseInt(request.getParameter("id")) ;
+		
+		// 获取需要更新的英雄
+		Hero hero = new HeroDAO().get(id);
+		
+		StringBuffer format = new StringBuffer();
+		response.setContentType("text/html; charset=UTF-8");
+		
+		// 提交修改的表格
+		format.append(" <Form action='updateHero' method='post'> ");
+		format.append(" 名字：<input type='text' name='name' value='%s'> <br> ");
+		format.append(" 血量：<input type='text' name='hp' value='%f'> <br> ");
+		format.append(" 攻击：<input type='text' name='damage' value='%d'> <br> ");
+		format.append(" <input type='hidden' name='id' value='%d'> <br> ");	// 用于传输ID
+		format.append(" <input type='submit' value='提交'> <br> ");
+		format.append(" </form> ");
+		String html = String.format(format.toString(),hero.getName(),hero.getHp(),hero.getDamage(),hero.getId());
+		
+		response.getWriter().write(html);
+	}
+}
+```
+
+8.HeroUpdateServlet
+
+```java
+package servlet;
+
+import java.io.IOException;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@SuppressWarnings("serial")
+public class HeroUpdateServlet extends HttpServlet {
+	protected void service(HttpServletRequest request,HttpServletResponse response) throws IOException {
+		request.setCharacterEncoding("UTF-8");
+		
+		// 新建英雄对象
+		Hero hero = new Hero();
+		
+		// 获取英雄各个属性,并使用赋值方法
+		hero.setId(Integer.parseInt(request.getParameter("id")));
+		hero.setName(request.getParameter("name")); 
+		hero.setHp(Float.parseFloat(request.getParameter("hp")));
+		hero.setDamage(Integer.parseInt(request.getParameter("damage")));
+		
+		new HeroDAO().update(hero);
+		
+		response.sendRedirect("/listHero");
+	}
+}
+
+```
+
+9.web.xml
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app>
+  
+    <servlet>
+        <servlet-name>HelloServlet</servlet-name>
+        <servlet-class>HelloServlet</servlet-class>
+    </servlet>
+  
+    <servlet-mapping>
+        <servlet-name>HelloServlet</servlet-name>
+        <url-pattern>/hello</url-pattern>
+    </servlet-mapping>
+  	
+  	<!-- 获取英雄列表 -->
+  	<servlet>
+        <servlet-name>HeroListServlet</servlet-name>
+        <servlet-class>servlet.HeroListServlet</servlet-class>
+    </servlet>
+ 
+    <servlet-mapping>
+        <servlet-name>HeroListServlet</servlet-name>
+        <url-pattern>/listHero</url-pattern>
+    </servlet-mapping> 
+    
+    <!-- 增加英雄 -->
+     <servlet>
+        <servlet-name>HeroAddServlet</servlet-name>
+        <servlet-class>servlet.HeroAddServlet</servlet-class>
+    </servlet>
+ 
+    <servlet-mapping>
+        <servlet-name>HeroAddServlet</servlet-name>
+        <url-pattern>/addHero</url-pattern>
+    </servlet-mapping>
+    
+     <!-- 删除英雄 -->
+     <servlet>
+        <servlet-name>HeroDeleteServlet</servlet-name>
+        <servlet-class>servlet.HeroDeleteServlet</servlet-class>
+    </servlet>
+ 
+    <servlet-mapping>
+        <servlet-name>HeroDeleteServlet</servlet-name>
+        <url-pattern>/deleteHero</url-pattern>
+    </servlet-mapping>
+    
+    <!-- 编辑英雄 -->
+     <servlet>
+        <servlet-name>HeroEditServlet</servlet-name>
+        <servlet-class>servlet.HeroEditServlet</servlet-class>
+    </servlet>
+ 
+    <servlet-mapping>
+        <servlet-name>HeroEditServlet</servlet-name>
+        <url-pattern>/editHero</url-pattern>
+    </servlet-mapping>
+    
+    <!-- 编辑英雄 -->
+     <servlet>
+        <servlet-name>HeroUpdateServlet</servlet-name>
+        <servlet-class>servlet.HeroUpdateServlet</servlet-class>
+    </servlet>
+ 
+    <servlet-mapping>
+        <servlet-name>HeroUpdateServlet</servlet-name>
+        <url-pattern>/updateHero</url-pattern>
+    </servlet-mapping>
+    
+</web-app>
+```
+
+#### 注意
+
+1.Servlet编写html代码易用性较差，因此考虑用JSON
+
+2.当前内容学习目的是掌握底层的处理逻辑
