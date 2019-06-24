@@ -67,5 +67,4 @@
         <url-pattern>/updateHero</url-pattern>
     </servlet-mapping>
 
-    
 </web-app>

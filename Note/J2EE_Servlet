@@ -1018,3 +1018,5 @@ public class HeroUpdateServlet extends HttpServlet {
 #### 索引
 
 - Users/toyz/Package/J2EE/Dynamic
+
+#### 8.使用JSON格式传输数据
