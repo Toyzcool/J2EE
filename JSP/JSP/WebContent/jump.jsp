@@ -4,11 +4,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>测试客户端跳转和服务器跳转</title>
 </head>
 <body>
-	<hr>
-	<p style="text-align:center">copyright@<%= request.getParameter("year") %>
-	</p>
+	<jsp:forward page="hello.jsp"/>
 </body>
+
 </html>

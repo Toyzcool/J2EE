@@ -24,4 +24,6 @@
 <!-- 指令include -->
 <%@ include file="footer.jsp" %>
 <!-- 动作include -->
-<jsp:include page="footer.jsp" />
+<jsp:include page="footer.jsp" >
+	<jsp:param name="year" value="2019"/>
+</jsp:include>

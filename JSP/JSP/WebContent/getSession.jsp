@@ -7,8 +7,9 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<hr>
-	<p style="text-align:center">copyright@<%= request.getParameter("year") %>
-	</p>
+	<%
+		String name = (String)session.getAttribute("name");
+	%>
+	Session中的name值为：<%=name %>
 </body>
 </html>

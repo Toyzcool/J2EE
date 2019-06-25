@@ -4,11 +4,14 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Set Cookie</title>
 </head>
 <body>
-	<hr>
-	<p style="text-align:center">copyright@<%= request.getParameter("year") %>
-	</p>
+	<%
+		Cookie c = new Cookie("name","Toyz");
+		c.setMaxAge(24*60*60);
+		c.setPath("/");
+		response.addCookie(c);
+	%>
 </body>
 </html>

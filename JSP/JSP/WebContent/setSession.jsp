@@ -4,11 +4,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Set Session </title>
 </head>
 <body>
-	<hr>
-	<p style="text-align:center">copyright@<%= request.getParameter("year") %>
-	</p>
+	<%
+		session.setAttribute("name","Session");
+	%>
+	<a href="getSession.jsp">跳转到getSeesion.jsp</a>
 </body>
 </html>
