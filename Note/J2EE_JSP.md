@@ -284,19 +284,277 @@
 
 2.隐式不需要显示定义，可以直接使用
 
+### 10.JSTL
 
+#### 方法
 
+1.JSTL为标准标签库，能够像使用HTML标签一样在jsp中开发Java功能
 
+2.具体方法和实现见，实现1
 
+#### 实现
 
+```jsp
+<%@page import="java.util.ArrayList"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8" import="java.util.*"%>
+   
+    <!-- 引入使用的JSTL标签库 -->
+	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+	
+	<!-- 引入使用的JSTL标签库,fmt常用于格式化数字 -->
+	<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt"  prefix='fmt' %>  
 
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JSTL</title>
+</head>
+<body>
 
+	<!-- 1.赋值和输出值的方法 -->
+	<h3>1.赋值和输出值的方法</h3>
+		<!-- 在request作用域中设置值 -->
+		<c:set var="name" value="${'JSTLName'}" scope="request" />
+		
+		<!-- 输出在request中的值 -->
+		通过标签获取name:<c:out value="${name}" />
+	
+	<!-- 2.if逻辑判断 -->
+	<h3>2.if逻辑判断</h3>
+		<c:set var="hp" value="${10}" scope="request" />
+		<!-- if判断 -->
+		<c:if test="${hp < 5 }" >
+			<p> 英雄血量较低 </p>
+		</c:if>
+		<c:if test="${!(hp < 5) }">
+			<p> 英雄血量健康 </p>
+		</c:if>
+		
+		<%
+			pageContext.setAttribute("weapon", null);
+		%>
+		<c:if test="${empty weapon }">
+			<p> 英雄没有武器 </p>
+		</c:if>
+	
+	<!-- 3.choose逻辑判断 -->
+	<h3>3.choose逻辑判断</h3>
+		<c:set var="hp" value="${8}" scope="request" />
+		<c:choose>
+			<c:when test="${ hp == 10 }"> <p>英雄满血</p> </c:when>
+			<c:when test="${ hp == 9 }"> <p>英雄高血量</p> </c:when>
+			<c:when test="${ hp == 1 }"> <p>英雄血量不足</p> </c:when>	
+			<c:otherwise><p>英雄血量未知</p></c:otherwise>
+		</c:choose>
+	
+	<!-- 4.forEach -->
+	<h3>4.forEach</h3>
+	<%
+		List<String> heros = new ArrayList();
+		heros.add("塔姆");
+		heros.add("伊泽瑞尔");
+		heros.add("薇恩");
+		request.setAttribute("heros", heros);
+	%>
+	<table width="200px" align="center" border="1" cellspacing="0">
+		<tr>
+			<td>英雄</td>
+			<td>编号</td>
+		</tr>
+		<c:forEach items="${ heros }" var="hero" varStatus="st" >
+		<tr>
+			<td> <c:out value="${ st.count }" /></td>
+			<td> <c:out value="${ hero }" /></td>
+		</tr>
+		</c:forEach>
+	</table>
+	
+	<!-- 5.fmt格式化数字 -->
+	<h3>5.fmt格式化数字</h3>
+	<c:set var="money" value="10" />
+	<c:set var="pi" value="23.12121" />
+	原数字为10,最少两个小数点：<fmt:formatNumber type="number" value="${ money }" minFractionDigits="2" ></fmt:formatNumber>
+	<br>
+	原数字为23.12121,最多两个小数点：<fmt:formatNumber type="number" value="${ pi }" maxFractionDigits="2" ></fmt:formatNumber>
+	
+	<!-- 6.fmt格式化日期 -->
+	<h3>6.fmt格式化日期</h3>
+	<%
+		Date now = new Date();
+		pageContext.setAttribute("now", now);
+	%>
+	<fmt:formatDate value="${ now }" pattern="YYYY年MM月dd日" />
+	
+	
+</body>
+</html>
+```
 
+#### 索引
 
+- Package/J2EE/JSP/JSP/JSTL.jsp
 
+### 10.EL表达式语言
 
+#### 方法
 
+1.取值
 
+- 使用${name},进行取值，见实现1
+
+2.作用域优先级
+
+- pageContext>request>session>application
+
+3.获取JavaBean属性，只需要通过符号.来获取，实现2
+
+4.改造forEach方法，实现2
+
+5.取参方法，${param.name}
+
+6.条件判断，实现2
+
+- eq相等 ne、neq不相等，
+  gt大于， lt小于
+  gt大于， lt小于
+  gte、ge大于等于 
+  lte、le 小于等于 
+  not非 mod求模 
+  is [not] div by是否能被某数整除 
+  is [not] even是否为偶数 
+  is [not] odd是否为奇
+
+#### 实现
+
+实现1
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8" import="java.util.*"%>
+      <!-- 引入使用的JSTL标签库 -->
+	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>EL</title>
+</head>
+<body>
+
+	<!-- 1.取值 -->
+	<h3>1.取值</h3>
+	<c:set var="name" value="${ 'Toyz' }" scope="request" />
+	通过标签获取：<c:out value="${ name }" /><br>
+	通过EL获取：${ name }
+</body>
+</html>
+```
+
+实现2
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8" import="java.util.*" import="bean.*"%>
+      <!-- 引入使用的JSTL标签库 -->
+	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>EL</title>
+</head>
+<body>
+
+	<!-- 1.取值 -->
+	<h3>1.取值</h3>
+	<c:set var="name" value="${ 'Toyz' }" scope="request" />
+	通过标签获取：<c:out value="${ name }" /><br>
+	通过EL获取：${ name }
+	
+	<!-- 2.获取JavaBean属性 -->
+	<h3>2.获取JavaBean属性</h3>
+	<%
+		Hero hero = new Hero();
+		hero.setName("Tooyz");
+		hero.setDamage(100);
+		request.setAttribute("hero", hero);
+	%>
+	英雄姓名：${ hero.name } <br>
+	英雄攻击力：${ hero.damage }
+	
+	<!-- 3.EL结合forEach -->
+	<h3>3.EL结合forEach</h3>
+		<%
+			List<String> heros = new ArrayList();
+			heros.add("A");
+			heros.add("B");
+			heros.add("C");
+			request.setAttribute("heros", heros);
+		%>
+		<table width="200px" align="center" border="1" cellspacing="0">
+		<tr>
+			<td>序号</td>
+			<td>名称</td>
+		</tr>
+		<c:forEach items="${ heros }" var="hero" varStatus="st">
+			<tr>
+			<td>${ st.count }</td>
+			<td>${ hero }</td>
+		</tr>
+		</c:forEach>
+		</table>
+	
+	<!-- 4.EL表达式eq的用法 -->
+	<h3>4.EL表达式eq的用法</h3>
+	<%
+		request.setAttribute("killNumber", "10");
+	%>
+	EL表达式eq的用法,运行结果为：${ killNumber ge 10? "超神":"没超神" }
+	
+	
+</body>
+</html>
+```
+
+Hero.java
+
+```java
+package bean;
+public class Hero {
+	 	public int id;
+	    public String name;
+	    public float hp;
+	    public int damage;
+	    public int getId() {
+	        return id;
+	    }
+	    public void setId(int id) {
+	        this.id = id;
+	    }
+	    public String getName() {
+	        return name;
+	    }
+	    public void setName(String name) {
+	        this.name = name;
+	    }
+	    public float getHp() {
+	        return hp;
+	    }
+	    public void setHp(float hp) {
+	        this.hp = hp;
+	    }
+	    public int getDamage() {
+	        return damage;
+	    }
+	    public void setDamage(int damage) {
+	        this.damage = damage;
+	    }
+	     
+}
+
+```
 
 
 
