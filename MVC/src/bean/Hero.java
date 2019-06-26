@@ -15,8 +15,8 @@ public class Hero {
 	public String getName() {
 		return name;
 	}
-	public void setName(String nameString) {
-		this.name = nameString;
+	public void setName(String name) {
+		this.name = name;
 	}
 	public float getHp() {
 		return hp;
