@@ -14,17 +14,25 @@
 			<td>名称</td>
 			<td>血量</td>
 			<td>输出</td>
+			<td>edit</td>
+			<td>delete</td>
 		</tr>
 		<c:forEach items="${ heros }" var="hero" varStatus="st">
 			<tr>
-			<td>${ hero.id }</td>
-			<td>${ hero.name }</td>
-			<td>${ hero.hp }</td>
-			<td>${ hero.damage }</td>
-			<td><a href="editHero?id=${hero.id}">edit</a></td>
-			<td><a href="deleteHero?id=${hero.id}">delete</a></td>
+				<td>${ hero.id }</td>
+				<td>${ hero.name }</td>
+				<td>${ hero.hp }</td>
+				<td>${ hero.damage }</td>
+				<td><a href="editHero?id=${ hero.id }">edit</a></td>
+				<td><a href="deleteHero?id=${ hero.id } ">delete</a></td>
 			</tr>
 		</c:forEach>
+		<tr>
+			<td colspan="6" align="center">
+				<a href="?start = ${ pre }">[上一页]</a>
+				<a href="?start = ${ next }">[下一页]</a>
+			</td>
+		</tr>
 	</table>
 </body>
 </html>

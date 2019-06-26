@@ -150,7 +150,7 @@ public class HeroDAO{
 	// 查询
 	public List<Hero> list(int start,int count){
 		List<Hero> heros = new ArrayList<Hero>();
-		String sql = "select * from hero order by id desc limit ? , ?";
+		String sql = "select * from hero order by id asc limit ? , ?";
 		try (
 				Connection c =  getConnection();
 				PreparedStatement ps = c.prepareStatement(sql);
