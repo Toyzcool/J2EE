@@ -48,3 +48,6 @@
   <Context docBase="Dynamic" path="/项目名" reloadable="true" source="org.eclipse.jst.jee.server:Dynamic"/></Host>改为<Context docBase="Dynamic" path="/" reloadable="true" source="org.eclipse.jst.jee.server:Dynamic"/></Host>
 - 2.修改项目ProperProperties：右键项目-ProperProperties-Web Project Setting-Context root中的内容修改为/
 
+7.数据库取数据
+
+- 由于数据库取数据，和数组一样，初始值是0；需要和id区分

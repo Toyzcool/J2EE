@@ -12,3 +12,8 @@
 
 3.模型比如bean、Dao；控制器比如Servlet；控制器比如jsp
 
+### 2.项目总结
+
+#### 方法
+
+1.需要HeroEditServlet和HeroUpdataServlet两个Servlet的原因解析
