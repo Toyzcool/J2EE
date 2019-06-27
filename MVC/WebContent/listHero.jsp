@@ -62,5 +62,10 @@ $(function(){
 			<input type="submit" value="添加" class="btn btn-success">
 		</form>
 	</div>
+	
+	<!-- 在线人数统计 -->
+	<div style="margin:10px auto; width:300px">
+		当前 在线人数 ： ${online_number}
+	</div>
 </body>
 </html>
